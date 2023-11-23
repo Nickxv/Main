@@ -1,0 +1,37 @@
+import socket
+import cv2
+import numpy as np
+import sys
+import pygame
+from pygame.locals import QUIT
+import threading
+
+def receive_frame(sock):
+    length = int(sock.recv(16))
+    data = b""
+    while len(data) < length:
+        data += sock.recv(4096)
+    return cv2.imdecode(np.frombuffer(data, dtype=np.uint8), 1)
+
+def screen_cast():
+    while True:
+        frame = receive_frame(server_conn)
+        cv2.imshow("Laptop Screen", frame)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    cv2.destroyAllWindows()
+
+def main():
+    host = '192.168.128.199'  # Replace with the IP address of the server laptop
+    port = 5555
+
+    global server_conn
+    server_conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_conn.connect((host, port))
+
+    cast_thread = threading.Thread(target=screen_cast)
+    cast_thread.start()
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,1 @@
+streamlit run "C:\Users\nlada\Desktop\Projects\Diabetes-prediction-using-Streamlit-main\multiple disease pred.py"

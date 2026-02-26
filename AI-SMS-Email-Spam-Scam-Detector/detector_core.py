@@ -127,12 +127,32 @@ def url_risk(url: str) -> str:
     return "low"
 
 
+def _extract_sender_domain(value: str) -> str:
+    sender = value.strip().lower()
+    sender = re.sub(r"^https?://", "", sender)
+    sender = sender.split("/")[0]
+
+    if "@" in sender:
+        return sender.rsplit("@", 1)[-1]
+    return sender
+
+
+def _is_trusted_domain(domain: str) -> bool:
+    return any(domain == trusted or domain.endswith(f".{trusted}") for trusted in KNOWN_SENDERS)
+
+
 def sender_reputation(sender: str) -> str:
     value = sender.strip().lower()
     if not value:
         return "unknown"
-    if any(domain in value for domain in KNOWN_SENDERS):
+
+    domain = _extract_sender_domain(value)
+    if _is_trusted_domain(domain):
         return "trusted"
+
+    if any(trusted in domain for trusted in KNOWN_SENDERS):
+        return "suspicious"
+
     if any(hint in value for hint in BAD_SENDER_HINTS):
         return "suspicious"
     if re.search(r"\d{5,}", value):

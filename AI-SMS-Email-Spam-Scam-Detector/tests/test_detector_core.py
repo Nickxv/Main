@@ -25,6 +25,10 @@ class DetectorCoreTests(unittest.TestCase):
         self.assertEqual(sender_reputation("alerts@sbi.co.in"), "trusted")
         self.assertEqual(sender_reputation("winner-offer@gmail.com"), "suspicious")
 
+    def test_sender_reputation_spoofed_domain_not_trusted(self):
+        self.assertEqual(sender_reputation("alerts@sbi.co.in.evil.com"), "suspicious")
+        self.assertEqual(sender_reputation("portal.icicibank.com"), "trusted")
+
     def test_url_risk(self):
         self.assertEqual(url_risk("https://bit.ly/freegift"), "high")
         self.assertEqual(url_risk("https://very-long-safe-domain-example-with-many-chars.com/path/to/a/resource/and-more"), "medium")

@@ -1,6 +1,7 @@
 import unittest
 
 from detector_core import (
+    URL_PLACEHOLDER,
     clean_text,
     combine_risk_score,
     detect_categories,
@@ -14,8 +15,14 @@ from detector_core import (
 class DetectorCoreTests(unittest.TestCase):
     def test_clean_text_normalizes_urls_and_case(self):
         cleaned = clean_text("VERIFY NOW at https://bit.ly/offer!!")
-        self.assertIn("urltoken", cleaned)
+        self.assertIn(URL_PLACEHOLDER, cleaned)
         self.assertEqual(cleaned, cleaned.lower())
+
+
+    def test_clean_text_replaces_multiple_urls_with_placeholder(self):
+        cleaned = clean_text("visit https://a.com now and also www.b.org/offer")
+        self.assertEqual(cleaned.count(URL_PLACEHOLDER), 2)
+        self.assertNotIn("https://a.com", cleaned)
 
     def test_extract_urls(self):
         urls = extract_urls("Check http://abc.com and www.xyz.in now")

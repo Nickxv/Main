@@ -39,6 +39,9 @@ TRAIN_DATA = [
     ("Your Swiggy order has been delivered", 0),
 ]
 
+URL_PLACEHOLDER = "urltoken"
+
+
 CATEGORY_RULES = {
     "phishing": ["login", "verify", "click", "password", "account", "identity"],
     "lottery": ["lottery", "winner", "won", "prize", "reward", "claim"],
@@ -58,10 +61,10 @@ class ModelBundle:
 
 def clean_text(text: str) -> str:
     text = text.lower().strip()
-    text = re.sub(r"https?://\S+|www\.\S+", " urltoken ", text)
-    text = re.sub(r"[^a-z0-9\s]", " ", text)
+    text = re.sub(r"https?://\S+|www\.\S+", f" {URL_PLACEHOLDER} ", text)
+    text = re.sub(r"[^a-z0-9\s_]", " ", text)
     text = re.sub(r"\s+", " ", text)
-    return text
+    return text.strip()
 
 
 

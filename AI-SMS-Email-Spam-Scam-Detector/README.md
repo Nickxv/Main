@@ -9,6 +9,7 @@ A resume-ready Streamlit project for detecting India-focused scams (OTP theft, K
 - ML probability score (TF-IDF + Logistic Regression)
 - Suspicious keyword highlighting
 - Explanation box with human-readable reasoning
+- Sidebar model metrics: Accuracy, Precision, Recall, F1
 
 ### Advanced
 - URL extraction + risk levels
@@ -23,7 +24,7 @@ A resume-ready Streamlit project for detecting India-focused scams (OTP theft, K
 - Load in-project dataset
 - Clean text
 - Train TF-IDF + Logistic Regression
-- Evaluate holdout accuracy and display in sidebar
+- Evaluate holdout metrics and display in sidebar
 
 ### Phase 2 — Smart Detection
 - Suspicious keyword detection
@@ -42,9 +43,21 @@ A resume-ready Streamlit project for detecting India-focused scams (OTP theft, K
 - Add Chrome extension UI for inbox/SMS quick scan
 - Deploy to Streamlit Cloud / Render and connect monitoring
 
+## Project Structure
+
+- `app.py`: Streamlit UI and dashboard.
+- `detector_core.py`: model training + rule-engine logic.
+- `tests/test_detector_core.py`: unit tests for core detection behavior.
+
 ## Run locally
 
 ```bash
 pip install -r requirements.txt
 streamlit run app.py
+```
+
+## Run tests
+
+```bash
+python -m unittest discover -s tests
 ```
